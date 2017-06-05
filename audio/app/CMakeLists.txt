@@ -1,44 +1,49 @@
-# For more information about using CMake with Android Studio, read the
-# documentation: https://d.android.com/studio/projects/add-native-code.html
-
-# Sets the minimum version of CMake required to build the native library.
 
 cmake_minimum_required(VERSION 3.4.1)
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
-
-add_library( # Sets the name of the library.
-             native-lib
-
-             # Sets the library as a shared library.
-             SHARED
-
-             # Provides a relative path to your source file(s).
-             src/main/cpp/native-lib.cpp )
-
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
-# default, you only need to specify the name of the public NDK library
-# you want to add. CMake verifies that the library exists before
-# completing its build.
-
-find_library( # Sets the name of the path variable.
+find_library(
               log-lib
-
-              # Specifies the name of the NDK library that
-              # you want CMake to locate.
               log )
+set(pathToProject ../../../../libs)
 
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
+# ----- fmode变声处理 ----- #
+add_library(
+            fmod
+            SHARED
+            IMPORTED)
+set_target_properties(
+            fmod
+            PROPERTIES IMPORTED_LOCATION
+            ../../../../libs/armeabi/libfmod.so
+             )
 
-target_link_libraries( # Specifies the target library.
-                       native-lib
+add_library(
+            fmodL
+            SHARED
+            IMPORTED)
+set_target_properties(
+            fmodL
+            PROPERTIES IMPORTED_LOCATION
+            ../../../../libs/armeabi/libfmodL.so
+             )
 
-                       # Links the target library to the log library
-                       # included in the NDK.
+
+# ----- fmode 变声处理JNI ----- #
+add_library(
+             voice_changer
+             SHARED
+             src/main/cpp/fmod/voice_changer.cpp)
+
+
+# ----- 参数引入 ----- #
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+
+# -----  头文件引入 ----- #
+include_directories(src/main/cpp/fmod/fmodinc)
+
+# ----- 添加Library ----- #
+target_link_libraries(
+                        voice_changer
+                        fmod
+                        fmodL
                        ${log-lib} )
