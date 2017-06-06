@@ -2,16 +2,37 @@ package com.a78.audio.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.a78.audio.MainApplication;
 import com.a78.audio.R;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import butterknife.ButterKnife;
 
 /**
  * Base Activity
  */
-public class BasePlayActivity extends AppCompatActivity {
+public abstract class BasePlayActivity extends AppCompatActivity {
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_base_play);
-//    }
+    protected String path;
+    protected ExecutorService executorService;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initView();
+        executorService= Executors.newSingleThreadExecutor();
+        path = ((MainApplication)getApplication()).getPath();
+    }
+
+    abstract void initView();
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executorService.shutdownNow();
+    }
 }

@@ -8,9 +8,10 @@ import com.a78.audio.R;
  */
 public class VoiceSpeedActivity extends BasePlayActivity {
 
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    void initView() {
         setContentView(R.layout.activity_voice_speed);
     }
 }
