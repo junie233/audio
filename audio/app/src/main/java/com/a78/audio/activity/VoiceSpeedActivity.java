@@ -11,7 +11,7 @@ public class VoiceSpeedActivity extends BasePlayActivity {
 
 
     @Override
-    void initView() {
+    public void initView() {
         setContentView(R.layout.activity_voice_speed);
     }
 }

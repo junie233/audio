@@ -1,14 +1,21 @@
 package com.a78.audio.activity;
 
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.a78.audio.MainApplication;
 import com.a78.audio.R;
 import com.a78.audio.jni.VoiceChangeJni;
+import com.iflytek.debuglog.DebugLog;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,7 +40,7 @@ public class VoiceChangeActivity extends BasePlayActivity {
 
 
     @Override
-    void initView() {
+    public void initView() {
         setContentView(R.layout.activity_voice_change);
         ButterKnife.inject(this);
     }
@@ -69,8 +76,48 @@ public class VoiceChangeActivity extends BasePlayActivity {
                 new VoiceChangeJni().fix(path,type);
             }
         });
+    }
 
 
+    private final int kSampleRate = 44100;
+    private final int kChannelMode = AudioFormat.CHANNEL_IN_STEREO;
+    private final int kEncodeFormat = AudioFormat.ENCODING_PCM_16BIT;
+    private AudioRecord mRecord;
+    boolean mReqStop = false;
+
+    private void init() {
+        int minBufferSize = AudioRecord.getMinBufferSize(kSampleRate, kChannelMode,
+                kEncodeFormat);
+        mRecord = new AudioRecord(MediaRecorder.AudioSource.REMOTE_SUBMIX,
+                kSampleRate, kChannelMode, kEncodeFormat, minBufferSize * 2);
+    }
+
+    private final int kFrameSize = 2048;
+    private String filePath = "/sdcard/voice.pcm";
+
+    private void recordAndPlay() {
+        FileOutputStream os = null;
+        mRecord.startRecording();
+        try {
+            os = new FileOutputStream(filePath);
+            byte[] buffer = new byte[kFrameSize];
+            int num = 0;
+            while (!mReqStop) {
+                num = mRecord.read(buffer, 0, kFrameSize);
+                DebugLog.d("buffer = " + buffer.toString() + ", num = " + num);
+                os.write(buffer, 0, num);
+            }
+
+           DebugLog.d("exit loop");
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            DebugLog.d("Dump PCM to file failed");
+        }
+        mRecord.stop();
+        mRecord.release();
+        mRecord = null;
+        DebugLog.d("clean up");
     }
 
 

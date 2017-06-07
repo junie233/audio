@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.a78.audio.activity.RecordPlayActivity;
 import com.a78.audio.activity.VoiceChangeActivity;
 import com.a78.audio.util.FileUtils;
 import com.iflytek.debuglog.DebugLog;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     Button bianshengBtn;
     @InjectView(R.id.fun_ll)
     LinearLayout funLl;
+    @InjectView(R.id.record_btn)
+    Button recordBtn;
 
     private String TAG = MainActivity.class.getSimpleName();
     private MainApplication application;
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.select_btn, R.id.biansheng_btn, R.id.fun_ll})
+    @OnClick({R.id.select_btn, R.id.biansheng_btn, R.id.fun_ll, R.id.record_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.select_btn:
@@ -62,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.fun_ll:
                 break;
+            case R.id.record_btn:
+                Intent recordIntent = new Intent(this, RecordPlayActivity.class);
+                startActivity(recordIntent);
+                break;
         }
     }
 
@@ -78,4 +85,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }

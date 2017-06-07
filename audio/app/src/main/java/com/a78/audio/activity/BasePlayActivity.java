@@ -27,7 +27,7 @@ public abstract class BasePlayActivity extends AppCompatActivity {
         path = ((MainApplication)getApplication()).getPath();
     }
 
-    abstract void initView();
+    public abstract void initView();
 
 
     @Override
