@@ -14,6 +14,7 @@ using namespace FMOD;
 #define MODE_GAOGUAI 4
 #define MODE_KONGLING 5
 
+
 extern "C" {
 
 JNIEXPORT void JNICALL

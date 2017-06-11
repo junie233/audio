@@ -35,6 +35,14 @@ add_library(
              src/main/cpp/fmod/voice_changer.cpp)
 
 
+
+# ----- Audiograph 变声处理 ----- #
+add_library(
+             audiograph
+             SHARED
+             src/main/cpp/audiograph/smbPitchShift.cpp)
+
+
 # ----- 参数引入 ----- #
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
@@ -46,4 +54,5 @@ target_link_libraries(
                         voice_changer
                         fmod
                         fmodL
+                        audiograph
                        ${log-lib} )

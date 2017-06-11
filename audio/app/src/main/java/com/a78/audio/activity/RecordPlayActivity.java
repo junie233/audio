@@ -7,6 +7,8 @@ import com.a78.audio.R;
 import com.a78.audio.activity.base.HighRecordPlayController;
 import com.a78.audio.activity.base.LowRecordPlayController;
 import com.a78.audio.activity.base.RecordPlayController;
+import com.a78.audio.activity.base.ShiftRecordPlayController;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import butterknife.ButterKnife;
@@ -35,7 +37,7 @@ public class RecordPlayActivity extends BasePlayActivity {
     public void initView() {
         setContentView(R.layout.activity_record_play);
         ButterKnife.inject(this);
-        recordPlayController = new HighRecordPlayController();
+        recordPlayController = new ShiftRecordPlayController();
         executorService = Executors.newSingleThreadExecutor();
     }
 
